@@ -23,6 +23,9 @@ export function mercatorYfromLat(lat: number): number {
     return (180 - (180 / Math.PI * Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360)))) / 360;
 }
 
+/**
+ * altitude / (指定维度周长) 
+ */
 export function mercatorZfromAltitude(altitude: number, lat: number): number {
     return altitude / circumferenceAtLatitude(lat);
 }

@@ -81,6 +81,8 @@ class Transform {
     mercatorFogMatrix: Float32Array;
 
     // Projection from world coordinates (mercator scaled by worldSize) to clip coordinates
+    // projMatrix = view matrix * projection matrix; 他是view与投影矩阵的乘积；
+    // 参见 ： _calcMatrices()
     projMatrix: Array<number>;
     invProjMatrix: Float64Array;
 
@@ -175,7 +177,8 @@ class Transform {
         this._center = new LngLat(0, 0);
         this.zoom = 0;
         this.angle = 0;
-        this._fov = 0.6435011087932844;
+        // this._fov = 1.0471975512;//J: 60degree;
+        this._fov = 0.6435011087932844;// 36.8698degree;
         this._pitch = 0;
         this._nearZ = 0;
         this._farZ = 0;
@@ -500,7 +503,10 @@ class Transform {
         if (weightSum === 0) return NaN;
         return elevationSum / weightSum;
     }
-
+    
+    /**
+     * camera pos under cartographic coord. (lng ,lat)
+     */
     get center(): LngLat { return this._center; }
     set center(center: LngLat) {
         if (center.lat === this._center.lat && center.lng === this._center.lng) return;

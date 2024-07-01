@@ -37,7 +37,7 @@ export default [{
     output: {
         dir: 'rollup/build/mapboxgl',
         format: 'amd',
-        sourcemap: 'inline',
+        sourcemap: false,
         indent: false,
         chunkFileNames: 'shared.js'
     },
@@ -52,7 +52,7 @@ export default [{
         name: 'mapboxgl',
         file: outputFile,
         format: 'umd',
-        sourcemap: production ? true : 'inline',
+        sourcemap: false,
         indent: false,
         intro: fs.readFileSync(fileURLToPath(new URL('./rollup/bundle_prelude.js', import.meta.url)), 'utf8'),
         banner

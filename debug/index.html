@@ -1,32 +1,443 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Mapbox GL JS debug page</title>
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel='stylesheet' href='../dist/mapbox-gl.css' />
     <style>
-        body { margin: 0; padding: 0; }
-        html, body, #map { height: 100%; }
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
     </style>
 </head>
 
 <body>
-<div id='map'></div>
+    <div id='map'></div>
 
-<script src='../dist/mapbox-gl-dev.js'></script>
-<script src='../debug/access_token_generated.js'></script>
-<script>
+    <script src='../dist/mapbox-gl-dev.js'></script>
+    <script src='../debug/access_token_generated.js'></script>
+    <!-- <script src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script> -->
+    <script>
 
-var map = window.map = new mapboxgl.Map({
-    container: 'map',
-    zoom: 12.5,
-    center: [-122.4194, 37.7749],
-    style: 'mapbox://styles/mapbox/streets-v11',
-    hash: true,
-    projection: 'globe'
-});
+        // const geojson = {
+        //     'type': 'FeatureCollection',
+        //     'features': [
+        //         {
+        //             'type': 'Feature',
+        //             'properties': {},
+        //             'geometry': {
+        //                 'coordinates': [
+        //                     [-73.97003, 40.67264],
+        //                     [-73.96985, 40.67235],
+        //                     [-73.96974, 40.67191],
+        //                     [-73.96972, 40.67175],
+        //                     [-73.96975, 40.67154],
+        //                     [-73.96987, 40.67134],
+        //                     [-73.97015, 40.67117],
+        //                     [-73.97045, 40.67098],
+        //                     [-73.97064, 40.67078],
+        //                     [-73.97091, 40.67038],
+        //                     [-73.97107, 40.67011],
+        //                     [-73.97121, 40.66994],
+        //                     [-73.97149, 40.66969],
+        //                     [-73.97169, 40.66985],
+        //                     [-73.97175, 40.66994],
+        //                     [-73.97191, 40.66998],
+        //                     [-73.97206, 40.66998],
+        //                     [-73.97228, 40.67008]
+        //                 ],
+        //                 'type': 'LineString'
+        //             }
+        //         }
+        //     ]
+        // };
 
-</script>
+        var map = window.map = new mapboxgl.Map({
+            container: 'map',
+            zoom: 0,
+            center: [0, 0],
+            style: 'mapbox://styles/mapbox/streets-v12',
+            // style: './style-mapbox.json',
+            //  style:"./streets-v12.json",
+            //  style:"./streets-v12-test.json",
+            //  style:'./style-mapbox-test.json',
+            hash: true,
+            projection: 'globe',
+        });
+
+        map.transform.fov = 60;
+        map.on('load', function () {
+
+            // map.getStyle().layers.forEach(element => {
+            //     map.setLayoutProperty(element.id, 'visibility', 'none');
+            // });
+
+
+            // map.addSource('tiandituimg',
+            //     {
+            //         "type": "raster",
+            //         tiles: [
+            //             "https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+            //             "https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+            //             "https://webst03.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+            //         ],
+            //         "tileSize": 256
+            //     }
+            // );
+            // map.addLayer({
+            //     "id": "tianditu-raster",
+            //     "type": "raster",
+            //     "source": "tiandituimg",
+            //     "minzoom": 0,
+            //     "maxzoom": 15
+            // });
+
+            // map.addLayer({
+            //     "id": "G02resulttest_datacun_PT",
+            //     "type": "circle",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ['http://localhost:8080/yuhuan/big_mvt/POINT/China_PT/{z}/{x}/{y}.pbf'],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "G02resulttest_datacun_PT",
+            //     "paint": {
+            //         "circle-color": "#FF0000"
+            //     }
+            // });
+
+            map.addSource(
+                'custom-source-a',
+                {
+                    "tiles": [
+                        "https://cimcube-test.glodon.com/Internal/CIMServer/GeoServices/v1/VectorTile/2914191406379008/{z}/{x}/{y}.pbf"
+                    ],
+                    "maxzoom": 22,
+                    "bounds": [
+                        106.5298096728698,
+                        29.466987853452892,
+                        106.78245492922258,
+                        29.61648987891464
+                    ],
+                    "type": "vector",
+                    "minzoom": 0
+                }
+            );
+            map.addLayer({
+                "layout": {
+                    "visibility": "visible",
+                    "text-field": [
+                        "get",
+                        "NAME"
+                    ],
+                    "text-size": 12,
+                    "text-anchor": "center",
+                    "text-allow-overlap": false,
+                    "icon-text-fit": "none",
+                    "icon-size": 1,
+                    "symbol-placement": "line",
+                    "icon-image": "",
+                    "text-font": [
+                        "Open Sans Regular"
+                    ],
+                    "text-rotate": 0,
+                    "text-pitch-alignment": "viewport",
+                    "icon-text-fit-padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "text-offset": [
+                        0,
+                        0
+                    ],
+                    "text-rotation-alignment": "auto",
+                    "text-padding": 2
+                },
+                "maxzoom": 15,
+                "paint": {
+                    "text-halo-color": "rgba(255, 255, 255, 1)",
+                    "text-halo-blur": 0,
+                    "text-color": "rgba(71, 71, 71, 1)",
+                    "icon-opacity": 1,
+                    "text-halo-width": 1,
+                    "text-opacity": 1
+                },
+                "id": "道路中线-注记",
+                "source": "custom-source-a",
+                "source-layer": "道路中线.zip",
+                "type": "symbol",
+                "minzoom": 12
+            });
+
+
+            // map.addLayer({
+            //     "id": "test-data-01",
+            //     "type": "circle",
+            //     "minzoom": 0,
+            //         "maxzoom": 15,
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ["https://cimcube-dev.glodon.com/Internal/CIMServer/GeoServices/v1/VectorTile/2756347017007104/{z}/{x}/{y}.pbf"]
+
+            //     },
+            //     "source-layer": "花源控规_CGCS2000PM(点)",
+            //     "paint": 
+            //     {
+            //         "circle-color": "#00FF00",
+            //         "circle-radius": 50,
+            //     },
+            //     "layout": {
+            //         "visibility": "visible"
+            //     },
+
+            // });
+            // map.addLayer({
+            //     "id": "test-data-02",
+            //     "type": "line",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ["https://cimcube-dev.glodon.com/Internal/CIMServer/GeoServices/v1/VectorTile/2756347017007104/{z}/{x}/{y}.pbf"],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "规划图纸1(线)(1)",
+            //     "paint": {
+            //         "line-color": "#f00",
+            //         "line-width": 1,
+            //         "line-opacity": 0.5,
+            //         "line-gap-width": 0,
+            //         "line-blur": 0,
+            //     },
+            //     "layout": {
+            //         "visibility": "visible",
+            //         "line-cap": "butt"
+            //     },
+            // });
+
+
+
+            // map.addLayer({
+            //     "id": "G02resulttest_datagis_osm_roads_free_1_Feature",
+            //     "type": "line",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ['http://localhost:8080/yuhuan/big_mvt/gis_osm_roads_free_1_Feature01/{z}/{x}/{y}.pbf'],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "G02resulttest_datagis_osm_roads_free_1_Feature",
+            //     "paint": {
+            //         // "line-width": 1,
+            //         // "line-cap": "round",
+            //         // "line-join": "round",
+            //         "line-color": "#00FF00",
+            //     }
+            // });
+            // map.addLayer({
+            //     "id": "G02resulttest_datagis_osm_buildings_a_free_1_PY",
+            //     "type": "fill",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ["http://localhost:8080/yuhuan/big_mvt/gis_osm_buildings_a_free_1_PY01/{z}/{x}/{y}.pbf"],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "G02resulttest_datagis_osm_buildings_a_free_1_PY",
+            //     "paint": {
+            //         "fill-outline-color": "#0000FF",
+            //         "fill-opacity": 1.0,
+            //         "fill-color": "#0000ff"
+            //     }
+            // });
+
+            // map.addLayer({
+            //     "id": "G02resulttest_datacun_PTaa",
+            //     "type": "symbol",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ['http://localhost:8080/yuhuan/big_mvt/POINT/China_PT/{z}/{x}/{y}.pbf'],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "G02resulttest_datacun_PT",
+            //     "paint": {
+            //         "text-color":"#FF0000",
+            //         "text-field":"Name",
+            //     }
+            // });
+            // map.addLayer({
+            //     "id": "G02resulttest_datagis_osm_roads_free_1_Featureaa",
+            //     "type": "line",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ['http://localhost:8080/yuhuan/big_mvt/gis_osm_roads_free_1_Feature01/{z}/{x}/{y}.pbf'],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "G02resulttest_datagis_osm_roads_free_1_Feature",
+            //     "paint": {
+            //         "line-width": 1,
+            //         "line-color": "#00FF00"
+            //     }
+            // });
+            // map.addLayer({
+            //     "id": "G02resulttest_datagis_osm_buildings_a_free_1_PYaa",
+            //     "type": "fill",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ["http://localhost:8080/yuhuan/big_mvt/gis_osm_buildings_a_free_1_PY01/{z}/{x}/{y}.pbf"],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "G02resulttest_datagis_osm_buildings_a_free_1_PY",
+            //     "paint": {
+            //         "fill-outline-color": "#0000FF",
+            //         "fill-opacity": 1.0,
+            //         "fill-color": "#0000ff"
+            //     }
+            // });
+
+            // map.addLayer({
+            //     "id": "G02resulttest_datacun_PTaabb",
+            //     "type": "circle",
+            //         "minzoom": 0,
+            //         "maxzoom": 15,
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ['http://localhost:8080/yuhuan/big_mvt/POINT/China_PT/{z}/{x}/{y}.pbf'],
+            //     },
+            //     "source-layer": "G02resulttest_datacun_PT",
+            //     "paint": {
+            //         "circle-color": "#FF0000",
+            //         "circle-radius":50,
+            //     }
+            // });
+            // map.addLayer({
+            //     "id": "G02resulttest_datagis_osm_roads_free_1_Featureaabb",
+            //     "type": "line",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ['http://localhost:8080/yuhuan/big_mvt/gis_osm_roads_free_1_Feature01/{z}/{x}/{y}.pbf'],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "G02resulttest_datagis_osm_roads_free_1_Feature",
+            //     "paint": {
+            //         "line-width": 30,
+            //         "line-color": "#FF0000",
+            //         // "line-gap-width": 10,
+            //         // "line-blur": 10,
+            //         "line-opacity": 0.5,
+            //     },
+            //     "layout": {
+            //         "line-cap": "round",
+            //         "line-join":'round',
+            //     }
+            // });
+            // map.addLayer({
+            //     "id": "G02resulttest_datagis_osm_buildings_a_free_1_PYaabb",
+            //     "type": "fill",
+            //     "source": {
+            //         "type": "vector",
+            //         "tiles": ["http://localhost:8080/yuhuan/big_mvt/gis_osm_buildings_a_free_1_PY01/{z}/{x}/{y}.pbf"],
+            //         "minzoom": 0,
+            //         "maxzoom": 15
+            //     },
+            //     "source-layer": "G02resulttest_datagis_osm_buildings_a_free_1_PY",
+            //     "paint": {
+            //         // "fill-opacity": 0.5,
+            //         "fill-color": "#00ff00",
+            //         'fill-outline-color':'#ff0000',
+            //         // 'fill-antialias':true,
+            //     }
+            // });
+
+
+
+            // map.addSource('line', {
+            //     type: 'geojson',
+            //     data: geojson
+            // });
+
+            // add a line layer without line-dasharray defined to fill the gaps in the dashed line
+            // map.addLayer({
+            //     type: 'line',
+            //     source: 'line',
+            //     id: 'cimcube-debug-line-background',
+            //     paint: {
+            //         'line-color': 'yellow',
+            //         'line-width': 6,
+            //         'line-opacity': 0.4
+            //     }
+            // });
+
+            // add a line layer with line-dasharray set to the first value in dashArraySequence
+            // map.addLayer({
+            //     type: 'line',
+            //     source: 'line',
+            //     id: 'cimcube-debug-line-dashed',
+            //     paint: {
+            //         'line-color': 'yellow',
+            //         'line-width': 6,
+            //         // 'line-dasharray': [0, 4, 3]
+            //     }
+            // });
+
+            // technique based on https://jsfiddle.net/2mws8y3q/
+            // an array of valid line-dasharray values, specifying the lengths of the alternating dashes and gaps that form the dash pattern
+            const dashArraySequence = [
+                [0, 4, 3],
+                [0.5, 4, 2.5],
+                [1, 4, 2],
+                [1.5, 4, 1.5],
+                [2, 4, 1],
+                [2.5, 4, 0.5],
+                [3, 4, 0],
+                [0, 0.5, 3, 3.5],
+                [0, 1, 3, 3],
+                [0, 1.5, 3, 2.5],
+                [0, 2, 3, 2],
+                [0, 2.5, 3, 1.5],
+                [0, 3, 3, 1],
+                [0, 3.5, 3, 0.5]
+            ];
+            let step = 0;
+            function animateDashArray(timestamp) {
+                // Update line-dasharray using the next value in dashArraySequence. The
+                // divisor in the expression `timestamp / 50` controls the animation speed.
+                const newStep = parseInt(
+                    (timestamp / 50) % dashArraySequence.length
+                );
+
+                if (newStep !== step) {
+                    map.setPaintProperty(
+                        'line-dashed',
+                        'line-dasharray',
+                        dashArraySequence[step]
+                    );
+                    step = newStep;
+                }
+
+                // Request the next frame of the animation.
+                requestAnimationFrame(animateDashArray);
+            }
+            // start the animation
+            //animateDashArray(0);
+        });
+
+    </script>
 </body>
+
 </html>
